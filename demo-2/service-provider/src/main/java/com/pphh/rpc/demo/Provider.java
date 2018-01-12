@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Provider {
 
-    public static void main(String[] args){
-        System.out.println("hello,world");
+    public static void main(String[] args) {
+        System.out.println("The service is stared and waiting for remote call.");
         SpringApplication.run(Provider.class, args);
     }
 

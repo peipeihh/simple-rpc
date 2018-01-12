@@ -15,13 +15,10 @@ public class HelloController {
     @RpcReferer
     private Greeting greetingService;
 
-    private Integer visitCount = 0;
-
     @RequestMapping("/hello")
     @ResponseBody
     public String home() {
-        String greetings = greetingService.sayHello("Michael");
-        return String.format("%s This service has been visited by %s times.", greetings, visitCount++);
+        return greetingService.sayHello("Michael");
     }
 
 }
