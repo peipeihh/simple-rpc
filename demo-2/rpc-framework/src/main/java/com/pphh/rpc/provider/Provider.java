@@ -63,7 +63,7 @@ public class Provider<T> implements Caller {
         for (Method method : methods) {
             List<Method> nameMethods = nameMethodMap.get(method.getName());
             if (nameMethods == null){
-                nameMethods = new ArrayList<Method>();
+                nameMethods = new ArrayList<>();
                 nameMethodMap.put(method.getName(), nameMethods);
             }
             nameMethods.add(method);

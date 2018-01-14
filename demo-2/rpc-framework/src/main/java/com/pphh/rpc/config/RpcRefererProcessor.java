@@ -1,6 +1,6 @@
 package com.pphh.rpc.config;
 
-import com.pphh.rpc.exception.SimpleBeansException;
+import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.annotation.RpcReferer;
 import com.pphh.rpc.proxy.ProxyInvocationHandler;
 import org.springframework.beans.BeansException;
@@ -34,7 +34,7 @@ public class RpcRefererProcessor implements BeanPostProcessor {
                     }
                 }
             } catch (Exception e) {
-                throw new SimpleBeansException("Failed to init rpc client reference at filed " + field.getName()
+                throw new SimpleRpcException("Failed to init rpc client reference at filed " + field.getName()
                         + " in class " + bean.getClass().getName(), e);
             }
         }

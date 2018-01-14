@@ -7,6 +7,7 @@ import com.pphh.rpc.rpc.Caller;
 import com.pphh.rpc.rpc.DefaultResponse;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
+import com.pphh.rpc.util.LogUtil;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.io.InputStream;
 public class RemoteService implements Caller {
 
     public Response invoke(Request request) {
-        System.out.println("send a remote rpc call from consumer...");
+        LogUtil.print("send a remote rpc call from consumer...");
 
         DefaultResponse response = new DefaultResponse();
         response.setRequestId(request.getRequestId());

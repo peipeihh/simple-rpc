@@ -1,5 +1,6 @@
 package com.pphh.rpc.demo;
 
+import com.pphh.rpc.util.LogUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Consumer {
 
     public static void main(String[] args) {
-        System.out.println("app is stared, please go to browser and visit the web service by: http://localhost:8080/hello");
+        LogUtil.print("app is stared, please go to browser and visit the web service by: http://localhost:8080/hello");
         SpringApplication.run(Consumer.class, args);
     }
 

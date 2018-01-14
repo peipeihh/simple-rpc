@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.pphh.rpc.provider.Provider;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
+import com.pphh.rpc.util.LogUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -25,7 +26,7 @@ public class ServletEndpoint extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("receive a remote rpc call in the provider...");
+        LogUtil.print("receive a remote rpc call in the provider...");
 
         InputStream input = req.getInputStream();
         byte[] data = IOUtils.toByteArray(input);
