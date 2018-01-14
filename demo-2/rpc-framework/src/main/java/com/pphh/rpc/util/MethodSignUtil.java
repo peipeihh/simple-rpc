@@ -28,8 +28,7 @@ public class MethodSignUtil {
         builder.append(methodName);
         if (parameterTypes != null) {
             builder.append("(");
-            //builder.append(StringUtils.join(parameterTypes));
-            builder.append(String.join("|", parameterTypes));
+            builder.append(StringUtils.join('|', parameterTypes));
             builder.append(")");
         }
         return builder.toString();

@@ -61,8 +61,11 @@ public class Provider<T> implements Caller {
         Method[] methods = clazz.getMethods();
         Map<String, List<Method>> nameMethodMap = new HashMap<>();
         for (Method method : methods) {
-            nameMethodMap.putIfAbsent(method.getName(), new ArrayList<Method>());
             List<Method> nameMethods = nameMethodMap.get(method.getName());
+            if (nameMethods == null){
+                nameMethods = new ArrayList<Method>();
+                nameMethodMap.put(method.getName(), nameMethods);
+            }
             nameMethods.add(method);
         }
         for (String methodName : nameMethodMap.keySet()) {
