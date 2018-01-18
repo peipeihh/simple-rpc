@@ -50,39 +50,38 @@ mvn clean package
 ## 演示
 
 1. 下面的演示中将分别启动服务消费者和提供者在如下端口，
-  * 运行服务消费者在9000端口
-  * 运行服务提供者在9090、9091、9092端口
-  * 打开浏览器，访问如下地址将触发远程服务调用
-  ``` bash
-  http://localhost:9000/hello
-  ```
-  * 消费者将根据指定的容错策略和负载均衡机制，执行相应的远程服务调用
+   * 运行服务消费者在9000端口
+   * 运行服务提供者在9090、9091、9092端口
+   * 打开浏览器，访问如下地址将触发远程服务调用
+   ``` bash
+   http://localhost:9000/hello
+   ```
+   * 消费者将根据指定的容错策略和负载均衡机制，执行相应的远程服务调用
 
 2. 缺省配置启动（failfast容错策略和random负载均衡机制）
-
-  - 打开一个shell窗口，运行服务消费者，启动端口为9000，并配置可用的远程服务地址。
-  ``` bash
-  set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
-  set service_remote=http://localhost:9090/rpc,http://localhost:9091/rpc,http://localhost:9092/rpc
-  java -Dserver.port=9000 -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
-  ```
-  在默认情况下（未指定rpc.client.ha和rpc.client.lb环境属性），消费者使用failfast容错策略和random负载均衡机制。
-  上述命令等同于，
-  ``` bash
-  java -Dserver.port=9000 -Drpc.client.ha=failfast -Drpc.client.lb=random -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
-  ```
-  - 打开三个shell窗口，分别运行服务提供者在端口9090、9091和9092（请在三个不同shell中启动java）。
-  ``` bash
-  set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
-  java -Dserver.port=9090 -jar %service_provider_jar%
-  java -Dserver.port=9091 -jar %service_provider_jar%
-  java -Dserver.port=9092 -jar %service_provider_jar%
-  ```
-  - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
-  ``` bash
-  http://localhost:9000/hello
-  ```
-  刷新多次可以发现，远程服务的调用是随机访问。
+   - 打开一个shell窗口，运行服务消费者，启动端口为9000，并配置可用的远程服务地址。
+   ``` bash
+   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   set service_remote=http://localhost:9090/rpc,http://localhost:9091/rpc,http://localhost:9092/rpc
+   java -Dserver.port=9000 -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
+   ```
+   在默认情况下（未指定rpc.client.ha和rpc.client.lb环境属性），消费者使用failfast容错策略和random负载均衡机制。
+   上述命令等同于，
+   ``` bash
+   java -Dserver.port=9000 -Drpc.client.ha=failfast -Drpc.client.lb=random -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
+   ```
+   - 打开三个shell窗口，分别运行服务提供者在端口9090、9091和9092（请在三个不同shell中启动java）。
+   ``` bash
+   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   java -Dserver.port=9090 -jar %service_provider_jar%
+   java -Dserver.port=9091 -jar %service_provider_jar%
+   java -Dserver.port=9092 -jar %service_provider_jar%
+   ```
+   - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
+   ``` bash
+   http://localhost:9000/hello
+   ```
+   刷新多次可以发现，远程服务的调用是随机访问。
 
 3. 演示服务的负载均衡机制 - roundrobin （轮询选择可用远程服务）
    - 重启服务消费者，启动命令如下，配置loadbalance策略为roundrobin。
