@@ -2,22 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>com.pphh.demo</groupId>
-    <artifactId>simple-rpc</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>demo-full-pack</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
     <modules>
-        <module>demo-1</module>
-        <module>demo-2</module>
-        <module>demo-3</module>
+        <module>rpc-framwork</module>
+        <module>service-api</module>
+        <module>service-provider</module>
+        <module>service-consumer</module>
     </modules>
 
     <properties>
+        <springboot.version>1.5.8.RELEASE</springboot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.source.jdk>1.7</java.source.jdk>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
