@@ -17,12 +17,12 @@ public class FailOverHaStrategy implements HaStrategy {
     public Response call(Request request, LoadBalancer loadBalancer) {
 
         int tryCount = 3;
-        for (int i = 0; i <= tryCount; i++) {
+        for (int i = 1; i < tryCount; i++) {
             try {
                 RemoteService remoteService = loadBalancer.select(request);
                 return remoteService.invoke(request);
             } catch (RuntimeException e) {
-                System.out.println("Receive an exception on FailOverStrategy, tryCount = " + i);
+                System.out.println("Receive an exception on FailOverStrategy, retry to visit next server..." + i);
             }
         }
 

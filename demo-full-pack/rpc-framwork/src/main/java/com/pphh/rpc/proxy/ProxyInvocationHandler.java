@@ -4,6 +4,7 @@ import com.pphh.rpc.cluster.ClusterCaller;
 import com.pphh.rpc.rpc.DefaultRequest;
 import com.pphh.rpc.rpc.Response;
 import com.pphh.rpc.transport.RemoteService;
+import com.pphh.rpc.util.LogUtil;
 import com.pphh.rpc.util.MethodSignUtil;
 
 import java.lang.reflect.InvocationHandler;
@@ -17,9 +18,9 @@ import java.util.UUID;
  */
 public class ProxyInvocationHandler<T> implements InvocationHandler {
 
-    private Class<T> interfaceClz;
-//    private RemoteService remoteService = new RemoteService();
+    //    private RemoteService remoteService = new RemoteService();
     public static ClusterCaller clusterCaller;
+    private Class<T> interfaceClz;
 
     public ProxyInvocationHandler(Class<T> interfaceClz) {
         this.interfaceClz = interfaceClz;
@@ -47,6 +48,7 @@ public class ProxyInvocationHandler<T> implements InvocationHandler {
 
         //Response response = remoteService.invoke(request);
         Response response = clusterCaller.invoke(request);
+        LogUtil.print("consumer receive response from remote rpc call, value=" + response.getValue());
         return response.getValue();
     }
 
