@@ -10,10 +10,12 @@ import com.pphh.rpc.cluster.lb.RoundRobinLoadBalancer;
 import com.pphh.rpc.cluster.support.DefaultClusterCaller;
 import com.pphh.rpc.proxy.ProxyInvocationHandler;
 import com.pphh.rpc.transport.RemoteService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,30 +27,50 @@ import java.util.List;
 @Configuration
 public class ClusterHaLdConfig {
 
+    @Value("${rpc.client.remote.service:http://localhost:9090/rpc}")
+    private String remoteHosts;
+
     @Bean
-    @ConditionalOnProperty(name = "rpc.client.lb", havingValue = "random", matchIfMissing = true)
-    public LoadBalancer buildRandomLoadBalance() {
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "rpc.client.lb", matchIfMissing = true)
+    public LoadBalancer buildLoadBalance(@Value("${rpc.client.lb:random}") String lbType) {
+        LoadBalancer lb = null;
+
         List<RemoteService> remoteServices = getListOfRemoteService();
-        return new RandomLoadBalancer(remoteServices);
+        if (lbType != null && lbType.equals("random")) {
+            lb = new RandomLoadBalancer(remoteServices);
+        } else if (lbType != null && lbType.equals("roundrobin")) {
+            lb = new RoundRobinLoadBalancer(remoteServices);
+        }
+
+        return lb;
+    }
+
+    private List<RemoteService> getListOfRemoteService() {
+        List<RemoteService> remoteServices = new ArrayList<>();
+        String[] urls = remoteHosts.split(",");
+        for (String url : urls) {
+            remoteServices.add(new RemoteService(url));
+        }
+        return remoteServices;
     }
 
     @Bean
-    @ConditionalOnProperty(name = "rpc.client.lb", havingValue = "roundrobin")
-    public LoadBalancer buildRRLoadBalance() {
-        List<RemoteService> remoteServices = getListOfRemoteService();
-        return new RoundRobinLoadBalancer(remoteServices);
-    }
+    @ConditionalOnProperty(name = "rpc.client.ha", matchIfMissing = true)
+    public HaStrategy buildFailOverHaStrategy(@Value("${rpc.client.ha:failfast}") String haType) {
+        HaStrategy ha = null;
 
-    @Bean
-    @ConditionalOnProperty(name = "rpc.client.ha", havingValue = "failfast", matchIfMissing = true)
-    public HaStrategy buildFailFastHaStrategy() {
-        return new FailFastHaStrategy();
-    }
+        if (haType.equals("failfast")) {
+            ha = new FailFastHaStrategy();
+        } else if (haType.equals("failover")) {
+            ha = new FailOverHaStrategy();
+        }
 
-    @Bean
-    @ConditionalOnProperty(name = "rpc.client.ha", havingValue = "failover")
-    public HaStrategy buildFailOverHaStrategy() {
-        return new FailOverHaStrategy();
+        return ha;
     }
 
     @Bean
@@ -57,13 +79,6 @@ public class ClusterHaLdConfig {
         ClusterCaller cc = new DefaultClusterCaller(ha, lb);
         ProxyInvocationHandler.clusterCaller = cc;
         return cc;
-    }
-
-    private List<RemoteService> getListOfRemoteService() {
-        List<RemoteService> remoteServices = new ArrayList<>();
-        remoteServices.add(new RemoteService("http://localhost:8081/rpc"));
-        remoteServices.add(new RemoteService("http://localhost:8080/rpc"));
-        return remoteServices;
     }
 
 }
