@@ -1,5 +1,6 @@
 # simple-rpc
-这是一个对RPC框架所使用的核心技术以尽量简单的方式进行介绍讲解的项目，包括
+本项目以尽量简单的方式演示一个RPC框架中所使用的核心技术，包括
+
   * 服务提供方和消费方实现
   * 服务的注册和发现机制
   * 服务集群的高可用和负载均衡
@@ -8,7 +9,7 @@
   * 数据传输的序列化和反序列化处理
   * 等等。
 
-本项目将会对每一个话题提供一个演示项目，帮助大家深入浅出地理解各个核心技术原理和实现。
+目标是演示和调研RPC框架技术，将会对每一个话题提供一个演示项目，帮助大家深入浅出地理解各个核心技术原理和实现。
 
 This project use a simple way as possible to briefly introduce the core technologies which are usually used on a RPC framework, which includes,
   * service provider and consumer
@@ -42,3 +43,6 @@ There are a series of demo projects, which will introduce the core techs one by 
 
 # 演示6
 调用监控（metrics）
+
+# 演示（全技术栈）
+full pack tech demo
