@@ -6,6 +6,7 @@ import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
 import com.pphh.rpc.transport.RemoteService;
+import com.pphh.rpc.util.LogUtil;
 
 /**
  * Created by huangyinhuang on 1/17/2018.
@@ -15,18 +16,29 @@ public class FailOverHaStrategy implements HaStrategy {
 
     @Override
     public Response call(Request request, LoadBalancer loadBalancer) {
+        Response response = null;
 
         int tryCount = 3;
         for (int i = 1; i < tryCount; i++) {
             try {
                 RemoteService remoteService = loadBalancer.select(request);
-                return remoteService.invoke(request);
+                response = remoteService.invoke(request);
+                Exception remoteException = response.getException();
+                if (remoteException != null) {
+                    throw new RuntimeException(remoteException.getMessage(), remoteException);
+                } else {
+                    break;
+                }
             } catch (RuntimeException e) {
-                System.out.println("Receive an exception on FailOverStrategy, retry to visit next server..." + i);
+                LogUtil.print("Receive an exception on FailOverStrategy, retry to visit next server..." + i);
             }
         }
 
-        throw new SimpleRpcException("FailOverStrategy failed to complete remote service call with tries of " + tryCount);
+        if (response == null) {
+            throw new SimpleRpcException("FailOverStrategy failed to complete remote service call with tries of " + tryCount);
+        }
+
+        return response;
     }
 
 }

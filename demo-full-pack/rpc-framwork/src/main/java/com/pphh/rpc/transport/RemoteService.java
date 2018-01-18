@@ -47,7 +47,7 @@ public class RemoteService implements Caller {
             Class clz = request.getReturnType();
             response.setValue(clz.cast(result));
         } catch (UnirestException | IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             response.setException(e);
         }
 
