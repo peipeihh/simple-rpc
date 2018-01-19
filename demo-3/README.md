@@ -77,7 +77,7 @@ mvn clean package
 2. 缺省配置启动（failfast容错策略和random负载均衡机制）
    - 打开一个shell窗口，运行服务消费者，启动端口为9000，并配置可用的远程服务地址。
    ``` bash
-   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   set service_consumer_jar=./service-consumer/target/service-consumer-v3-1.3-SNAPSHOT.jar
    set service_remote=http://localhost:9090/rpc,http://localhost:9091/rpc,http://localhost:9092/rpc
    java -Dserver.port=9000 -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
    ```
@@ -88,7 +88,7 @@ mvn clean package
    ```
    - 打开三个shell窗口，分别运行服务提供者在端口9090、9091和9092（请在三个不同shell中启动java）。
    ``` bash
-   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   set service_provider_jar=./service-provider/target/service-provider-v3-1.3-SNAPSHOT.jar
    java -Dserver.port=9090 -jar %service_provider_jar%
    java -Dserver.port=9091 -jar %service_provider_jar%
    java -Dserver.port=9092 -jar %service_provider_jar%

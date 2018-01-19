@@ -1,0 +1,6 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.pphh.rpc.config.RpcRefererProcessor,\
+  com.pphh.rpc.config.RpcServiceProcessor,\
+  com.pphh.rpc.config.ClusterHaLdConfig,\
+  com.pphh.rpc.transport.RpcTransportConfig
