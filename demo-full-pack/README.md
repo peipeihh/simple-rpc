@@ -25,7 +25,7 @@
 ## 项目编译
 整个项目目录结构如下，
 ```
-- pom.xml 这是整个Maven项目的pom文件，演示项目的根目录
+- pom.xml 整个Maven项目的pom文件，这是演示项目的根目录
 + demo-scripts 演示的启动脚本命令
 + rpc-framework
   - pom.xml
