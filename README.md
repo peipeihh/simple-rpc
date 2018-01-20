@@ -44,5 +44,5 @@ There are a series of demo projects, which will introduce the core techs one by 
 # 演示6
 调用监控（metrics）
 
-# 演示（全技术栈）
+# 演示（全栈技术）
 full pack tech demo
