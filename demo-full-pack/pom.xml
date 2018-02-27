@@ -18,6 +18,7 @@
         <module>service-api</module>
         <module>service-provider</module>
         <module>service-consumer</module>
+        <module>service-consumer-local</module>
     </modules>
 
     <properties>

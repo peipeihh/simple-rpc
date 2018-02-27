@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>simple-rpc</artifactId>
+        <groupId>com.pphh.demo</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pphh.demo</groupId>
+    <artifactId>demo-4</artifactId>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>rpc-framwork</module>
+        <module>service-api</module>
+        <module>service-provider</module>
+        <module>service-consumer</module>
+        <module>service-consumer-local</module>
+    </modules>
+
+    <properties>
+    <springboot.version>1.5.8.RELEASE</springboot.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.source.jdk>1.7</java.source.jdk>
+</properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${java.source.jdk}</source>
+                    <target>${java.source.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
