@@ -122,3 +122,9 @@ mvn clean package
    java -Dserver.port=9000 -Drpc.client.ha=failover -Drpc.client.remote.service=%service_remote% -jar %service_consumer_jar%
    ```
    刷新多次可以发现，当远程服务调用到9092端口时，服务抛出异常，但马上会重试远程调用，直到成功，重试次数为3次。这就是失败自动切换的机制在起作用。
+
+## 联系 Contact
+我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。
+
+## 授权方式 License
+Apache License 2.0

@@ -10,7 +10,6 @@
 - TODO
 
 
-
 ## 项目编译
 整个项目目录结构如下，
 ```
@@ -109,3 +108,9 @@ mvn clean package
    Will try to greet world ...
    Greeting: Hello world
    ```
+   
+## 联系 Contact
+我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。
+
+## 授权方式 License
+Apache License 2.0

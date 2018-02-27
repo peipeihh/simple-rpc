@@ -145,3 +145,9 @@ mvn clean package
    http://localhost:9000/hello
    ```
    刷新页面，观察消费者和提供者的日志，远程服务的调用根据文件注册中心，轮询访问三个远程服务提供者。
+
+## 联系 Contact
+我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。
+
+## 授权方式 License
+Apache License 2.0
