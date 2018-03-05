@@ -45,11 +45,9 @@ import java.util.Set;
 public class RpcServiceProcessor implements BeanPostProcessor {
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     Environment environment;
-
+    @Autowired
+    private ApplicationContext applicationContext;
 
     public Object postProcessBeforeInitialization(Object bean, String s) throws BeansException {
         return bean;
@@ -72,26 +70,6 @@ public class RpcServiceProcessor implements BeanPostProcessor {
     private void registerRpcService(Class interfaceClass, Object bean) {
         Provider<?> provider = new Provider<>(bean, interfaceClass);
         ServletEndpoint.PROVIDERS.put(interfaceClass.getName(), provider);
-
-        // register the provider and its services
-        Registry registry = applicationContext.getBean(Registry.class);
-        if (registry != null) {
-            String localPort = environment.getProperty("server.port");
-            try {
-                InetAddress inetAddress = NetUtil.getLocalAddress();
-                Integer port = Integer.parseInt(localPort);
-                URL url = new URL(inetAddress.getHostAddress(), port);
-                Map<String, Method> methodMap = provider.getMethodMap();
-                Set<String> serviceList = methodMap.keySet();
-                for (String serviceName : serviceList) {
-                    registry.register(url, serviceName);
-                }
-            } catch (NumberFormatException e) {
-                LogUtil.print("failed to parse server port.");
-            }
-
-        }
-
     }
 
 }

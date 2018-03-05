@@ -48,7 +48,7 @@ public class RoundRobinLoadBalancer implements LoadBalancer {
         RemoteService remoteService = null;
 
         if (remoteServiceList != null && remoteServiceList.size() > 0) {
-            if (this.index == remoteServiceList.size()) {
+            if (this.index >= remoteServiceList.size()) {
                 this.index = 0;
             }
             remoteService = remoteServiceList.get(index++);

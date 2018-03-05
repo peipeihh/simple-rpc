@@ -91,14 +91,14 @@ mvn clean package
 2. 演示DirectRegistry （远程直连配置）
    - 启动服务提供者，启动命令如下，
    ``` bash
-   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   set service_provider_jar=./service-provider/target/service-provider-v4-1.4-SNAPSHOT.jar
    java -Dserver.port=9090 -jar %service_provider_jar%
    java -Dserver.port=9091 -jar %service_provider_jar%
    java -Dserver.port=9092 -jar %service_provider_jar%
    ```
    - 服务消费者，启动命令如下，配置注册中心类型为direct，并指定了直连的远程服务地址。
    ``` bash
-   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   set service_consumer_jar=./service-consumer/target/service-consumer-v4-1.4-SNAPSHOT.jar
    set service_remote=http://localhost:9090/rpc,http://localhost:9091/rpc,http://localhost:9092/rpc
    java -Dserver.port=9000 -Drpc.registry.type=direct -Drpc.registry.direct.remote=%service_remote% -jar %service_consumer_jar%
    ```
@@ -111,7 +111,7 @@ mvn clean package
 2. 演示LocalRegistry （远程服务本地调用）
    - 启动服务消费者，启动命令如下，
    ``` bash
-   set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v10-1.10-SNAPSHOT.jar
+   set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v4-1.4-SNAPSHOT.jar
    java -Dserver.port=9002 -Drpc.registry.type=local -jar %service_consumer_local_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
@@ -129,7 +129,7 @@ mvn clean package
    - 清空文件c://temp/registry.txt，或者删除。
    - 启动服务提供者，启动命令如下，配置注册中心类型为file，在文件registry.txt中实现服务的注册和发现
    ``` bash
-   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   set service_provider_jar=./service-provider/target/service-provider-v4-1.4-SNAPSHOT.jar
    java -Dserver.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
    java -Dserver.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
    java -Dserver.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
@@ -137,7 +137,7 @@ mvn clean package
    启动后，可以打开文件c://temp/registry.txt，查看所有服务的注册信息。
    - 服务消费者，启动命令如下，配置注册中心类型为file，在文件registry.txt中发现服务提供者
    ``` bash
-   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   set service_consumer_jar=./service-consumer/target/service-consumer-v4-1.4-SNAPSHOT.jar
    java -Dserver.port=9000 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_consumer_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
@@ -145,6 +145,7 @@ mvn clean package
    http://localhost:9000/hello
    ```
    刷新页面，观察消费者和提供者的日志，远程服务的调用根据文件注册中心，轮询访问三个远程服务提供者。
+   - 可以尝试先后关闭9090/9091端口的服务提供者，再次刷新页面，可以发现消费者会根据服务在注册中心的状态，选择可用的服务提供者进行调用。
 
 ## 联系 Contact
 我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。

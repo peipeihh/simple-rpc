@@ -18,6 +18,8 @@ import com.pphh.rpc.rpc.URL;
 import com.pphh.rpc.util.LogUtil;
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +33,8 @@ public class FileRegistry implements Registry {
 
     static String HOST_SPLITOR = ",";
     static String REGISTRY_SPLITOR = "==";
+    static String LAST_ACTIVATED = "lastactived";
+    static Long TIMEOUT = 5000L;
     private String sharedFile;
 
     public FileRegistry(String filePath) {
@@ -44,6 +48,7 @@ public class FileRegistry implements Registry {
         // refresh the service's registry by add the rpc remote host
         String providerHosts = registries.get(serviceName);
         Set<URL> providers = filter(providerHosts, remoteRpcUrl);
+        remoteRpcUrl.setQueryItem(LAST_ACTIVATED, String.valueOf(new Date().getTime()));
         providers.add(remoteRpcUrl);
 
         providerHosts = "";
@@ -81,8 +86,14 @@ public class FileRegistry implements Registry {
         String[] urls = remoteHosts.split(HOST_SPLITOR);
         for (String url : urls) {
             URL provider = URL.valueOf(url);
-            if (provider != null) {
-                remoteServiceUrls.add(provider);
+            String lastActivated = provider.findQueryItem(LAST_ACTIVATED);
+            if (lastActivated != null) {
+                Long tsLastActivated = Long.parseLong(lastActivated);
+                Long tsNow = new Date().getTime();
+                Long tsDiff = tsNow - tsLastActivated;
+                if (tsDiff < TIMEOUT) {
+                    remoteServiceUrls.add(provider);
+                }
             }
         }
 
@@ -91,17 +102,18 @@ public class FileRegistry implements Registry {
 
     /**
      * Input a list of provider and remove
-     * @param providerHosts a list of provider hosts which is separated by HOST_SPLITOR
-     * @param providerInFilter a provider to be removed
+     *
+     * @param providerHosts   a list of provider hosts which is separated by HOST_SPLITOR
+     * @param providerRemoved a provider to be removed
      * @return a list of provider after removing
      */
-    private Set<URL> filter(String providerHosts, URL providerInFilter){
+    private Set<URL> filter(String providerHosts, URL providerRemoved) {
         Set<URL> providers = new HashSet<>();
 
-        if (providerHosts != null){
+        if (providerHosts != null) {
             String[] urls = providerHosts.split(FileRegistry.HOST_SPLITOR);
             for (String url : urls) {
-                if (!providerInFilter.equals(URL.valueOf(url))) {
+                if (!providerRemoved.equals(URL.valueOf(url))) {
                     providers.add(URL.valueOf(url));
                 }
             }
@@ -178,5 +190,6 @@ public class FileRegistry implements Registry {
                 }
             }
         }
+
     }
 }
