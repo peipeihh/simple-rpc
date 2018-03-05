@@ -27,6 +27,7 @@
         <module>motan</module>
         <module>dubbo</module>
         <module>grpc</module>
+        <module>simple-spi</module>
     </modules>
 
     <properties>
