@@ -28,6 +28,7 @@
         <module>dubbo</module>
         <module>grpc</module>
         <module>simple-spi</module>
+        <module>simple-feign</module>
     </modules>
 
     <properties>
