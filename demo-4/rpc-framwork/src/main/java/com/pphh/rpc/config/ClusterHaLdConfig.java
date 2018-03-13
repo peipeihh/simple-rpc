@@ -24,8 +24,6 @@ import com.pphh.rpc.cluster.lb.RoundRobinLoadBalancer;
 import com.pphh.rpc.cluster.support.DefaultClusterCaller;
 import com.pphh.rpc.proxy.ProxyInvocationHandler;
 import com.pphh.rpc.registry.Registry;
-import com.pphh.rpc.transport.RemoteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,8 +31,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by huangyinhuang on 1/18/2018.

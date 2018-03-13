@@ -16,11 +16,7 @@ package com.pphh.rpc.config;
 
 import com.pphh.rpc.annotation.RpcService;
 import com.pphh.rpc.provider.Provider;
-import com.pphh.rpc.registry.Registry;
-import com.pphh.rpc.rpc.URL;
 import com.pphh.rpc.transport.ServletEndpoint;
-import com.pphh.rpc.util.LogUtil;
-import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -31,9 +27,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.util.Map;
 import java.util.Set;
 
 /**

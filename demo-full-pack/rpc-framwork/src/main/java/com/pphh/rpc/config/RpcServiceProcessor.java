@@ -16,11 +16,8 @@ package com.pphh.rpc.config;
 
 import com.pphh.rpc.annotation.RpcService;
 import com.pphh.rpc.provider.Provider;
-import com.pphh.rpc.registry.Registry;
-import com.pphh.rpc.rpc.URL;
+import com.pphh.rpc.scheduler.RegistryScheduler;
 import com.pphh.rpc.transport.ServletEndpoint;
-import com.pphh.rpc.util.LogUtil;
-import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -31,9 +28,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,6 +42,8 @@ public class RpcServiceProcessor implements BeanPostProcessor {
     Environment environment;
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private RegistryScheduler registryScheduler;
 
     public Object postProcessBeforeInitialization(Object bean, String s) throws BeansException {
         return bean;

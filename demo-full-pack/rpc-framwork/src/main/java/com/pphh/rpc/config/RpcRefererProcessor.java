@@ -15,7 +15,6 @@
 package com.pphh.rpc.config;
 
 import com.pphh.rpc.annotation.RpcReferer;
-import com.pphh.rpc.cluster.ClusterCaller;
 import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.proxy.ProxyInvocationHandler;
 import org.springframework.beans.BeansException;
