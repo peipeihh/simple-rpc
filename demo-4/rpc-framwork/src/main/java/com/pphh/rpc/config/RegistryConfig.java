@@ -41,7 +41,7 @@ public class RegistryConfig {
     private String directRemoteHosts;
 
     @Bean
-    @ConditionalOnProperty(name = "rpc.registry.name", matchIfMissing = true)
+    @ConditionalOnProperty(name = "rpc.registry.type", matchIfMissing = true)
     public Registry buildRegistry() {
         Registry registry = null;
 
