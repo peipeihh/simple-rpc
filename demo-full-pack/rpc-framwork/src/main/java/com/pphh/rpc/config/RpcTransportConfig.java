@@ -32,7 +32,7 @@ import java.net.InetAddress;
 /**
  * Created by huangyinhuang on 1/11/2018.
  * The data receiving point during a remote service call, which is usually configured on provider side
- * 远程服务调用的数据传输接受点，一般配置在服务提供端中
+ * 远程服务调用的通信协议
  */
 @Configuration
 public class RpcTransportConfig {
@@ -49,7 +49,7 @@ public class RpcTransportConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "rpc.transport.type")
+    @ConditionalOnProperty(name = "rpc.transport.provider.port")
     public Server buildServer() {
         Server server = null;
 
@@ -71,6 +71,7 @@ public class RpcTransportConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "rpc.transport.type")
     public Client buildClient() {
         Client client = null;
 
