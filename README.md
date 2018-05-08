@@ -47,8 +47,11 @@ There are a series of demo projects, which will introduce the core techs one by 
 ## 演示5
 通信协议（Protocol）
 
-## 演示6
+## 演示6（TBD）
 调用监控（metrics）
+
+## 演示7（TBD）
+数据序列化（data serialization）
 
 ## 演示（全栈技术）
 full pack tech demo
