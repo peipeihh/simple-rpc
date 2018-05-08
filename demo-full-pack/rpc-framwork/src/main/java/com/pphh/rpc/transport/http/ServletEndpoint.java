@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * limitations under the License.
  */
-package com.pphh.rpc.transport;
+package com.pphh.rpc.transport.http;
 
 import com.pphh.rpc.provider.Provider;
 import com.pphh.rpc.rpc.Request;
@@ -46,35 +46,40 @@ public class ServletEndpoint extends HttpServlet {
         byte[] data = IOUtils.toByteArray(input);
         input.close();
         Request request = Serializer.getRequest(data);
-
-        // invoke the service call by request
-        Provider provider = PROVIDERS.get(request.getInterfaceName());
-        if (provider != null) {
-            Response response = provider.invoke(request);
-
-            // return the result
-            OutputStream out = resp.getOutputStream();
-            byte[] resultBytes = null;
-            if (response.getValue() != null) {
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resultBytes = SerializationUtils.serialize((Serializable) response.getValue());
-                //Class clz = request.getReturnType();
-                //resultBytes = convertToBytes(clz.cast(response.getValue()).toString());
-            } else if (response.getException() != null) {
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                resultBytes = "The remote service call run into an exception.".getBytes();
-            } else {
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                resultBytes = "The remote service call doesn't return any results.".getBytes();
-            }
-            out.write(resultBytes);
-            out.flush();
+        if (request == null) {
+            LogUtil.print("failed to deserialize the request from post payload.");
         } else {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            OutputStream out = resp.getOutputStream();
-            String msg = String.format("A bad reqeust was received from consumer.");
-            out.write(msg.getBytes());
-            out.flush();
+
+            // invoke the service call by request
+            Provider provider = PROVIDERS.get(request.getInterfaceName());
+            if (provider != null) {
+                Response response = provider.invoke(request);
+
+                // return the result
+                OutputStream out = resp.getOutputStream();
+                byte[] resultBytes = null;
+                if (response.getValue() != null) {
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resultBytes = SerializationUtils.serialize((Serializable) response.getValue());
+                    //Class clz = request.getReturnType();
+                    //resultBytes = convertToBytes(clz.cast(response.getValue()).toString());
+                } else if (response.getException() != null) {
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    resultBytes = "The remote service call run into an exception.".getBytes();
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    resultBytes = "The remote service call doesn't return any results.".getBytes();
+                }
+                out.write(resultBytes);
+                out.flush();
+            } else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                OutputStream out = resp.getOutputStream();
+                String msg = String.format("A bad reqeust was received from consumer.");
+                out.write(msg.getBytes());
+                out.flush();
+            }
+
         }
 
     }

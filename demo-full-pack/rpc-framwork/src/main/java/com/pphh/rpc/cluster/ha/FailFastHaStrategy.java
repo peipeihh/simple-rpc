@@ -19,7 +19,7 @@ import com.pphh.rpc.cluster.LoadBalancer;
 import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
-import com.pphh.rpc.transport.RemoteService;
+import com.pphh.rpc.transport.http.RemoteService;
 
 /**
  * Created by huangyinhuang on 1/17/2018.

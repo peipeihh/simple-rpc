@@ -16,7 +16,7 @@ package com.pphh.rpc.cluster.lb;
 
 import com.pphh.rpc.cluster.LoadBalancer;
 import com.pphh.rpc.rpc.Request;
-import com.pphh.rpc.transport.RemoteService;
+import com.pphh.rpc.transport.http.RemoteService;
 
 import java.util.ArrayList;
 import java.util.List;

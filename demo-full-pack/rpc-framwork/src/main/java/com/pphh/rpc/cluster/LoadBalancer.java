@@ -15,7 +15,7 @@
 package com.pphh.rpc.cluster;
 
 import com.pphh.rpc.rpc.Request;
-import com.pphh.rpc.transport.RemoteService;
+import com.pphh.rpc.transport.http.RemoteService;
 
 import java.util.List;
 

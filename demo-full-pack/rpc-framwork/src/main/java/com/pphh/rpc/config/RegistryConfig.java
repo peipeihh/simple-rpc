@@ -41,7 +41,6 @@ public class RegistryConfig {
     private String directRemoteHosts;
 
     @Bean
-    @ConditionalOnProperty(name = "rpc.registry.name", matchIfMissing = true)
     public Registry buildRegistry() {
         Registry registry = null;
 
@@ -66,6 +65,7 @@ public class RegistryConfig {
             case "file":
                 registry = new FileRegistry(registryHost);
                 break;
+            default:
         }
 
         return registry;

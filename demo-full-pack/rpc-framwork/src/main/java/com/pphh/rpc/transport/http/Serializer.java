@@ -12,9 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * limitations under the License.
  */
-package com.pphh.rpc.transport;
+package com.pphh.rpc.transport.http;
 
 import com.pphh.rpc.rpc.Request;
+import com.pphh.rpc.util.LogUtil;
 
 import java.io.*;
 
@@ -53,7 +54,7 @@ public class Serializer {
             in.close();
             byteInStream.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LogUtil.print("failed to parse the request from POST payload.");
         }
 
         return request;

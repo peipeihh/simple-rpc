@@ -28,6 +28,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.pphh.demo</groupId>
             <artifactId>rpc-framwork-v10</artifactId>
             <version>1.10-SNAPSHOT</version>

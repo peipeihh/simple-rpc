@@ -15,9 +15,11 @@
 package com.pphh.rpc.scheduler;
 
 import com.pphh.rpc.provider.Provider;
+import com.pphh.rpc.registry.LocalRegistry;
 import com.pphh.rpc.registry.Registry;
 import com.pphh.rpc.rpc.URL;
-import com.pphh.rpc.transport.ServletEndpoint;
+import com.pphh.rpc.transport.Server;
+import com.pphh.rpc.transport.http.ServletEndpoint;
 import com.pphh.rpc.util.LogUtil;
 import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +55,10 @@ public class RegistryScheduler {
 
         Registry registry = applicationContext.getBean(Registry.class);
         if (registry != null) {
-            String localPort = environment.getProperty("server.port");
 
             try {
-                InetAddress inetAddress = NetUtil.getLocalAddress();
-                Integer port = Integer.parseInt(localPort);
-                URL url = new URL(inetAddress.getHostAddress(), port);
+                Server server = applicationContext.getBean(Server.class);
+                URL url = new URL(server.getLocalAddress().getAddress().getHostAddress(), server.getLocalAddress().getPort());
 
                 for (Map.Entry<String, Provider<?>> entrySet : ServletEndpoint.PROVIDERS.entrySet()) {
                     Provider provider = entrySet.getValue();

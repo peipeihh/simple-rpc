@@ -17,7 +17,6 @@ package com.pphh.rpc.proxy;
 import com.pphh.rpc.cluster.ClusterCaller;
 import com.pphh.rpc.rpc.DefaultRequest;
 import com.pphh.rpc.rpc.Response;
-import com.pphh.rpc.transport.RemoteService;
 import com.pphh.rpc.util.LogUtil;
 import com.pphh.rpc.util.MethodSignUtil;
 

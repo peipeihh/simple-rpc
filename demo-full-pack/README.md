@@ -92,9 +92,9 @@ mvn clean package
    - 启动服务提供者，启动命令如下，
    ``` bash
    set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
-   java -Dserver.port=9090 -jar %service_provider_jar%
-   java -Dserver.port=9091 -jar %service_provider_jar%
-   java -Dserver.port=9092 -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9090 -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9091 -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9092 -jar %service_provider_jar%
    ```
    - 服务消费者，启动命令如下，配置注册中心类型为direct，并指定了直连的远程服务地址。
    ``` bash
@@ -130,9 +130,9 @@ mvn clean package
    - 启动服务提供者，启动命令如下，配置注册中心类型为file，在文件registry.txt中实现服务的注册和发现
    ``` bash
    set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
-   java -Dserver.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
-   java -Dserver.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
-   java -Dserver.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.provider.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
    ```
    启动后，可以打开文件c://temp/registry.txt，查看所有服务的注册信息。
    - 服务消费者，启动命令如下，配置注册中心类型为file，在文件registry.txt中发现服务提供者
