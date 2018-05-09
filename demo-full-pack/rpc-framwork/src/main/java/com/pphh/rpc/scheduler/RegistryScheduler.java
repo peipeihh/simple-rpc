@@ -58,7 +58,8 @@ public class RegistryScheduler {
 
             try {
                 Server server = applicationContext.getBean(Server.class);
-                URL url = new URL(server.getLocalAddress().getAddress().getHostAddress(), server.getLocalAddress().getPort());
+                //URL url = new URL(server.getLocalAddress().getAddress().getHostAddress(), server.getLocalAddress().getPort());
+                URL url = server.getLocalAddress();
 
                 for (Map.Entry<String, Provider<?>> entrySet : ServletEndpoint.PROVIDERS.entrySet()) {
                     Provider provider = entrySet.getValue();

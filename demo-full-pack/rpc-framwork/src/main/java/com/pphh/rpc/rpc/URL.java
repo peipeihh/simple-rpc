@@ -31,12 +31,12 @@ public class URL {
         this.protocol = "http";
         this.host = "127.0.0.1";
         this.port = 80;
-        this.path = "rpc";
+        this.path = "";
         this.queries = new HashMap<>();
     }
 
     public URL(String host, int port) {
-        this("http", host, port, "rpc", null);
+        this("http", host, port, "", null);
     }
 
     public URL(String protocol, String host, int port, String path, String fullQuery) {

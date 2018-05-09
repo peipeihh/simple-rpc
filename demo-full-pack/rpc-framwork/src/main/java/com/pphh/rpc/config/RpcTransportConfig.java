@@ -19,15 +19,13 @@ import com.pphh.rpc.transport.Client;
 import com.pphh.rpc.transport.Server;
 import com.pphh.rpc.transport.http.HttpClient;
 import com.pphh.rpc.transport.http.HttpServer;
-import com.pphh.rpc.transport.http.ServletEndpoint;
+import com.pphh.rpc.transport.netty.NettyClient;
+import com.pphh.rpc.transport.netty.NettyServer;
 import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.net.InetAddress;
 
 /**
  * Created by huangyinhuang on 1/11/2018.
@@ -44,21 +42,15 @@ public class RpcTransportConfig {
     private Integer transportPort;
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean() {
-        return new ServletRegistrationBean(new ServletEndpoint(), "/rpc/*");
-    }
-
-    @Bean
     @ConditionalOnProperty(name = "rpc.transport.provider.port")
     public Server buildServer() {
         Server server = null;
-
-        InetAddress inetAddress = NetUtil.getLocalAddress();
-        URL serverUrl = new URL(inetAddress.getHostAddress(), transportPort);
         switch (transportType) {
             case "http":
-                server = new HttpServer(serverUrl);
+                server = new HttpServer(transportPort);
                 break;
+            case "netty":
+                server = new NettyServer(transportPort);
             default:
         }
 
@@ -75,11 +67,12 @@ public class RpcTransportConfig {
     public Client buildClient() {
         Client client = null;
 
-        InetAddress inetAddress = NetUtil.getLocalAddress();
-        URL serverUrl = new URL(inetAddress.getHostAddress(), transportPort);
         switch (transportType) {
             case "http":
-                client = new HttpClient(serverUrl);
+                client = new HttpClient();
+                break;
+            case "netty":
+                client = new NettyClient();
                 break;
             default:
         }

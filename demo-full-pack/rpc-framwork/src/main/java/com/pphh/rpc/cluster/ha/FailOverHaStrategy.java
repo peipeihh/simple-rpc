@@ -19,7 +19,7 @@ import com.pphh.rpc.cluster.LoadBalancer;
 import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
-import com.pphh.rpc.transport.http.RemoteService;
+import com.pphh.rpc.transport.Client;
 import com.pphh.rpc.util.LogUtil;
 
 /**
@@ -36,9 +36,14 @@ public class FailOverHaStrategy implements HaStrategy {
         for (int i = 1; i <= tryCount; i++) {
 
             LogUtil.print("try to visit server..." + i);
-            RemoteService remoteService = loadBalancer.select(request);
+            Client remoteService = loadBalancer.select(request);
             if (remoteService != null) {
                 response = remoteService.invoke(request);
+                if (response == null) {
+                    LogUtil.print("Receive an empty response on FailOverStrategy, retry with continue...");
+                    continue;
+                }
+
                 Exception remoteException = response.getException();
                 if (remoteException != null) {
                     LogUtil.print("Receive an exception on FailOverStrategy, retry with continue...");

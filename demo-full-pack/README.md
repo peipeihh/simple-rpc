@@ -1,29 +1,33 @@
 
 ## 说明
 
-本项目演示远程服务调用的通信协议（transport）组件。
+本项目演示远程服务调用的通信（transport）组件。
 
-远程服务调用中，通信组件是一个底层实现，这个组件的性能优劣将直接影响到远程服务调用的吞吐量和稳定性。
+远程服务调用中，通信组件是一个底层实现，其所使用的通信框架性能优劣将直接影响到远程服务调用的吞吐量和稳定性。
 
-通信组件一般包括服务器和客户端两大功能组件，
+对于通信组件的框架实现，常见的有如下几种，
+- Netty
+- Apache Mina
+- Grizzly
+- Jetty
+Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty主要提供HTTP的通信协议。
+
+在远程服务调用中，通信组件一般包括服务器和客户端两大功能组件的实现，
 - 通信服务器：运行在RPC服务提供者方
 - 通信客户端：用于RPC消费者方，向远程服务提供者发起服务调用
+这两大组件连接着服务调用的两端，基于所使用的通信框架，有一一对应的关系。换句话说，若服务提供方是基于Netty的通信实现，则服务消费方也需要用Netty的客户端实现来对接。
 
 在项目中，分别抽象为如下接口类，
 - com.pphh.rpc.transport.Server
 - com.pphh.rpc.transport.Client
 
-通信组件的实现比较多样化，常见的有如下几种，
-- Netty
-- Apache Mina
-- Grizzly
-- Jetty
-Netty/Apache Mina/Grizzly可以提供包括HTTP/TCP的通信协议，而Jetty主要提供HTTP的通信协议。
-
 在本演示项目中，主要实现了基于Jetty来提供的HTTP通信协议。在启动演示程序时，可以通过下面两个环境变量来进行配置，
-- rpc.transport.type = http
+- rpc.transport.type = http, netty
 - rpc.transport.provider.port = 9090
-上面的配置含义为：使用基于Jetty来提供的HTTP通信协议，并将服务器运行在9090端口
+上面的配置含义为：
+- rpc.transport.type = http 使用基于Jetty来提供的HTTP通信协议
+- rpc.transport.type = netty 使用基于Netty来提供的TCP通信协议
+- rpc.transport.provider.port = 9090 服务器运行在9090端口
 
 更多详细请见下面的演示。
 
@@ -91,7 +95,7 @@ mvn clean package
    - 服务消费者，启动命令如下，配置注册中心类型为direct，并指定了直连的远程服务地址。
    ``` bash
    set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
-   set service_remote=http://localhost:9090/rpc,http://localhost:9091/rpc,http://localhost:9092/rpc
+   set service_remote=http://localhost:9090,http://localhost:9091,http://localhost:9092
    java -Dserver.port=9000 -Drpc.registry.type=direct -Drpc.registry.direct.remote=%service_remote% -jar %service_consumer_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。

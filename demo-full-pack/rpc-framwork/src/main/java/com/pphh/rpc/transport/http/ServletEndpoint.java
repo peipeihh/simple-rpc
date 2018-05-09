@@ -17,6 +17,7 @@ package com.pphh.rpc.transport.http;
 import com.pphh.rpc.provider.Provider;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
+import com.pphh.rpc.serializer.Serializer;
 import com.pphh.rpc.util.LogUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;

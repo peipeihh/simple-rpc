@@ -24,6 +24,8 @@ import com.pphh.rpc.cluster.lb.RoundRobinLoadBalancer;
 import com.pphh.rpc.cluster.support.DefaultClusterCaller;
 import com.pphh.rpc.proxy.ProxyInvocationHandler;
 import com.pphh.rpc.registry.Registry;
+import com.pphh.rpc.transport.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -75,9 +77,11 @@ public class ClusterHaLdConfig {
     @ConditionalOnBean({HaStrategy.class, LoadBalancer.class, Registry.class})
     public ClusterCaller buildClusterCaller(HaStrategy ha,
                                             LoadBalancer lb,
-                                            Registry registry) {
+                                            Registry registry,
+                                            Client client) {
         ClusterCaller cc = new DefaultClusterCaller(ha, lb);
-        cc.refreshByRegistry(registry);
+        cc.setRegistry(registry);
+        cc.setClientType(client.getClass());
         ProxyInvocationHandler.clusterCaller = cc;
         return cc;
     }

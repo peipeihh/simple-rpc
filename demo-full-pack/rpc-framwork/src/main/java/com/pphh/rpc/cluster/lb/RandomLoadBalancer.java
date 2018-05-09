@@ -16,7 +16,7 @@ package com.pphh.rpc.cluster.lb;
 
 import com.pphh.rpc.cluster.LoadBalancer;
 import com.pphh.rpc.rpc.Request;
-import com.pphh.rpc.transport.http.RemoteService;
+import com.pphh.rpc.transport.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,25 +28,25 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RandomLoadBalancer implements LoadBalancer {
 
-    List<RemoteService> remoteServiceList;
+    List<Client> remoteServiceList;
 
 
     public RandomLoadBalancer() {
         this.remoteServiceList = new ArrayList<>();
     }
 
-    public RandomLoadBalancer(List<RemoteService> remoteServices) {
+    public RandomLoadBalancer(List<Client> remoteServices) {
         this.remoteServiceList = remoteServices;
     }
 
     @Override
-    public void onRefresh(List<RemoteService> remoteServices) {
+    public void onRefresh(List<Client> remoteServices) {
         this.remoteServiceList = remoteServices;
     }
 
     @Override
-    public RemoteService select(Request request) {
-        RemoteService remoteService = null;
+    public Client select(Request request) {
+        Client remoteService = null;
 
         if (remoteServiceList != null && remoteServiceList.size() > 0) {
             int index = ThreadLocalRandom.current().nextInt(0, remoteServiceList.size());

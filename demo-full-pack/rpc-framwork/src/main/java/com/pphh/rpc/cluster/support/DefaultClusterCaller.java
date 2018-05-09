@@ -21,7 +21,8 @@ import com.pphh.rpc.registry.Registry;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
 import com.pphh.rpc.rpc.URL;
-import com.pphh.rpc.transport.http.RemoteService;
+import com.pphh.rpc.transport.Client;
+import com.pphh.rpc.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class DefaultClusterCaller implements ClusterCaller {
     private HaStrategy haStrategy;
     private LoadBalancer loadBalancer;
     private Registry registry;
+    private Class<? extends Client>  clientClazz;
 
     public DefaultClusterCaller(HaStrategy haStrategy,
                                 LoadBalancer loadBalancer) {
@@ -43,8 +45,13 @@ public class DefaultClusterCaller implements ClusterCaller {
     }
 
     @Override
-    public void refreshByRegistry(Registry registry) {
+    public void setRegistry(Registry registry) {
         this.registry = registry;
+    }
+
+    @Override
+    public void setClientType(Class<? extends Client> clientClazz) {
+        this.clientClazz = clientClazz;
     }
 
     @Override
@@ -52,17 +59,23 @@ public class DefaultClusterCaller implements ClusterCaller {
         // refresh the remote service providers by registry
         String serviceName = request.getMethodSignature();
         Set<URL> providers = this.registry.discover(serviceName);
-        List<RemoteService> remoteServices = getListOfRemoteService(providers);
+        List<Client> remoteServices = getListOfRemoteService(providers);
         this.loadBalancer.onRefresh(remoteServices);
 
         return haStrategy.call(request, loadBalancer);
     }
 
-    private List<RemoteService> getListOfRemoteService(Set<URL> providers) {
-        List<RemoteService> remoteServices = new ArrayList<>();
+    private List<Client> getListOfRemoteService(Set<URL> providers) {
+        List<Client> remoteServices = new ArrayList<>();
         if (providers != null) {
             for (URL url : providers) {
-                remoteServices.add(new RemoteService(url));
+                try {
+                    Client client = clientClazz.newInstance();
+                    client.setRemoteAddress(url);
+                    remoteServices.add(client);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    LogUtil.print("failed to initialize the client instance.");
+                }
             }
         }
         return remoteServices;

@@ -15,7 +15,7 @@
 package com.pphh.rpc.cluster;
 
 import com.pphh.rpc.rpc.Request;
-import com.pphh.rpc.transport.http.RemoteService;
+import com.pphh.rpc.transport.Client;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ import java.util.List;
  */
 public interface LoadBalancer {
 
-    void onRefresh(List<RemoteService> remoteServices);
+    void onRefresh(List<Client> remoteServices);
 
-    RemoteService select(Request request);
+    Client select(Request request);
 
 }

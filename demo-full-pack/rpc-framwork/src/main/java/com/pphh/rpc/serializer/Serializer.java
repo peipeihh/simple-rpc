@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * limitations under the License.
  */
-package com.pphh.rpc.transport.http;
+package com.pphh.rpc.serializer;
 
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.util.LogUtil;

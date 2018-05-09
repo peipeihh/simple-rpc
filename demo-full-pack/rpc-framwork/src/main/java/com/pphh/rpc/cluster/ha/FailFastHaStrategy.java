@@ -19,7 +19,7 @@ import com.pphh.rpc.cluster.LoadBalancer;
 import com.pphh.rpc.exception.SimpleRpcException;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
-import com.pphh.rpc.transport.http.RemoteService;
+import com.pphh.rpc.transport.Client;
 
 /**
  * Created by huangyinhuang on 1/17/2018.
@@ -31,7 +31,7 @@ public class FailFastHaStrategy implements HaStrategy {
     public Response call(Request request, LoadBalancer loadBalancer) {
         Response response = null;
 
-        RemoteService remoteService = loadBalancer.select(request);
+        Client remoteService = loadBalancer.select(request);
         if (remoteService != null) {
             response = remoteService.invoke(request);
         }

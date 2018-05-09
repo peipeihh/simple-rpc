@@ -16,6 +16,7 @@ package com.pphh.rpc.cluster;
 
 import com.pphh.rpc.registry.Registry;
 import com.pphh.rpc.rpc.Caller;
+import com.pphh.rpc.transport.Client;
 
 /**
  * Created by huangyinhuang on 1/17/2018.
@@ -23,10 +24,17 @@ import com.pphh.rpc.rpc.Caller;
 public interface ClusterCaller extends Caller {
 
     /**
-     * refresh remote service cluster by updated registry
+     * refresh registry, which helps to discover remote service cluster
      *
      * @param registry a service registry
      */
-    void refreshByRegistry(Registry registry);
+    void setRegistry(Registry registry);
+
+    /**
+     * set client class, which will be used to initialize all client instances
+     *
+     * @param clientClazz client class
+     */
+    void setClientType(Class<? extends Client> clientClazz);
 
 }
