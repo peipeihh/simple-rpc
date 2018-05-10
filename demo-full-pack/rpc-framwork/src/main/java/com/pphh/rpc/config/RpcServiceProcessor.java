@@ -16,6 +16,7 @@ package com.pphh.rpc.config;
 
 import com.pphh.rpc.annotation.RpcService;
 import com.pphh.rpc.provider.Provider;
+import com.pphh.rpc.provider.RpcProviderResource;
 import com.pphh.rpc.scheduler.RegistryScheduler;
 import com.pphh.rpc.transport.http.ServletEndpoint;
 import org.springframework.beans.BeansException;
@@ -65,7 +66,7 @@ public class RpcServiceProcessor implements BeanPostProcessor {
 
     private void registerRpcService(Class interfaceClass, Object bean) {
         Provider<?> provider = new Provider<>(bean, interfaceClass);
-        ServletEndpoint.PROVIDERS.put(interfaceClass.getName(), provider);
+        RpcProviderResource.PROVIDERS.put(interfaceClass.getName(), provider);
     }
 
 }

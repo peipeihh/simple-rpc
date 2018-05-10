@@ -15,6 +15,7 @@
 package com.pphh.rpc.transport.http;
 
 import com.pphh.rpc.provider.Provider;
+import com.pphh.rpc.provider.RpcProviderResource;
 import com.pphh.rpc.rpc.Request;
 import com.pphh.rpc.rpc.Response;
 import com.pphh.rpc.serializer.Serializer;
@@ -37,8 +38,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ServletEndpoint extends HttpServlet {
 
-    public static Map<String, Provider<?>> PROVIDERS = new ConcurrentHashMap<>();
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LogUtil.print("receive a remote rpc call in the provider...");
@@ -52,7 +51,7 @@ public class ServletEndpoint extends HttpServlet {
         } else {
 
             // invoke the service call by request
-            Provider provider = PROVIDERS.get(request.getInterfaceName());
+            Provider provider = RpcProviderResource.PROVIDERS.get(request.getInterfaceName());
             if (provider != null) {
                 Response response = provider.invoke(request);
 
@@ -76,7 +75,7 @@ public class ServletEndpoint extends HttpServlet {
             } else {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 OutputStream out = resp.getOutputStream();
-                String msg = String.format("A bad reqeust was received from consumer.");
+                String msg = String.format("No provider is found for the request: %s", request.getInterfaceName());
                 out.write(msg.getBytes());
                 out.flush();
             }

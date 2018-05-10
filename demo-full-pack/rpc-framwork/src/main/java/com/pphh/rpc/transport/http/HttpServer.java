@@ -59,6 +59,7 @@ public class HttpServer implements Server {
             this.server.setHandler(handlers);
             this.server.start();
 
+            LogUtil.print("start the jetty server on " + this.serverEndpoint.toString());
             bSuccess = true;
         } catch (Exception e) {
             LogUtil.print("failed to start the jetty server.");

@@ -24,6 +24,7 @@ Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty�
 在本演示项目中，主要实现了基于Jetty来提供的HTTP通信协议。在启动演示程序时，可以通过下面两个环境变量来进行配置，
 - rpc.transport.type = http, netty
 - rpc.transport.provider.port = 9090
+
 上面的配置含义为：
 - rpc.transport.type = http 使用基于Jetty来提供的HTTP通信协议
 - rpc.transport.type = netty 使用基于Netty来提供的TCP通信协议

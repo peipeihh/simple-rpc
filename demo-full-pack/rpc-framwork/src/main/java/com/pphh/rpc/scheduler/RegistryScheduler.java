@@ -15,6 +15,7 @@
 package com.pphh.rpc.scheduler;
 
 import com.pphh.rpc.provider.Provider;
+import com.pphh.rpc.provider.RpcProviderResource;
 import com.pphh.rpc.registry.LocalRegistry;
 import com.pphh.rpc.registry.Registry;
 import com.pphh.rpc.rpc.URL;
@@ -58,10 +59,9 @@ public class RegistryScheduler {
 
             try {
                 Server server = applicationContext.getBean(Server.class);
-                //URL url = new URL(server.getLocalAddress().getAddress().getHostAddress(), server.getLocalAddress().getPort());
                 URL url = server.getLocalAddress();
 
-                for (Map.Entry<String, Provider<?>> entrySet : ServletEndpoint.PROVIDERS.entrySet()) {
+                for (Map.Entry<String, Provider<?>> entrySet : RpcProviderResource.PROVIDERS.entrySet()) {
                     Provider provider = entrySet.getValue();
                     Map<String, Method> methodMap = provider.getMethodMap();
                     Set<String> serviceList = methodMap.keySet();
