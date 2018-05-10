@@ -30,7 +30,7 @@ import io.netty.handler.logging.LoggingHandler;
 import java.net.InetSocketAddress;
 
 /**
- * Please add description here.
+ * a transport client implemented by netty.
  *
  * @author huangyinhuang
  * @date 5/8/2018

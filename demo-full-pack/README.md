@@ -1,18 +1,11 @@
 
 ## 说明
 
-本项目演示远程服务调用的通信（transport）组件。
+本项目演示远程服务调用的数据通信（transport）组件。
 
 远程服务调用中，通信组件是一个底层实现，其所使用的通信框架性能优劣将直接影响到远程服务调用的吞吐量和稳定性。
 
-对于通信组件的框架实现，常见的有如下几种，
-- Netty
-- Apache Mina
-- Grizzly
-- Jetty
-Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty主要提供HTTP的通信协议。
-
-在远程服务调用中，通信组件一般包括服务器和客户端两大功能组件的实现，
+通常情况下，通信组件可分为服务器和客户端两大功能组件的实现，
 - 通信服务器：运行在RPC服务提供者方
 - 通信客户端：用于RPC消费者方，向远程服务提供者发起服务调用
 这两大组件连接着服务调用的两端，基于所使用的通信框架，有一一对应的关系。换句话说，若服务提供方是基于Netty的通信实现，则服务消费方也需要用Netty的客户端实现来对接。
@@ -21,14 +14,16 @@ Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty�
 - com.pphh.rpc.transport.Server
 - com.pphh.rpc.transport.Client
 
-在本演示项目中，主要实现了基于Jetty来提供的HTTP通信协议。在启动演示程序时，可以通过下面两个环境变量来进行配置，
-- rpc.transport.type = http, netty
-- rpc.transport.provider.port = 9090
+对于通信组件的框架实现，常见的有如下几种，
+- Netty
+- Apache Mina
+- Grizzly
+- Jetty
+Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty主要提供HTTP的通信协议。
 
-上面的配置含义为：
-- rpc.transport.type = http 使用基于Jetty来提供的HTTP通信协议
-- rpc.transport.type = netty 使用基于Netty来提供的TCP通信协议
-- rpc.transport.provider.port = 9090 服务器运行在9090端口
+在本演示项目中，主要实现了：基于Jetty的HTTP通信，基于Netty的TCP通信。在启动演示程序时，可以通过下面两个环境变量来进行配置，
+- rpc.transport.type = http, netty  通信方式选项
+- rpc.transport.provider.port = 9090 服务器运行端口
 
 更多详细请见下面的演示。
 
@@ -48,7 +43,8 @@ Netty/Apache Mina/Grizzly可以提供包括HTTP和TCP的通信协议，而Jetty�
       + transport
         - Client 通信客户端
         - Server 通信服务器
-        + http 基于Jetty提供的HTTP通信协议实现
+        + http 基于Jetty的HTTP通信实现
+        + netty 基于Netty的TCP通信实现
 + service-api 服务接口声明
   - pom.xml
   + src
@@ -85,19 +81,19 @@ mvn clean package
    ```
    * 消费者将根据配置的注册中心发现远程服务，执行相应的远程服务调用
 
-2. 演示DirectRegistry （远程直连配置）
+2. 演示1：基于Jetty的HTTP数据通信 + DirectRegistry
    - 启动服务提供者，启动命令如下，
    ``` bash
    set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
-   java -Drpc.transport.provider.port=9090 -jar %service_provider_jar%
-   java -Drpc.transport.provider.port=9091 -jar %service_provider_jar%
-   java -Drpc.transport.provider.port=9092 -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9090 -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9091 -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9092 -jar %service_provider_jar%
    ```
    - 服务消费者，启动命令如下，配置注册中心类型为direct，并指定了直连的远程服务地址。
    ``` bash
    set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
    set service_remote=http://localhost:9090,http://localhost:9091,http://localhost:9092
-   java -Dserver.port=9000 -Drpc.registry.type=direct -Drpc.registry.direct.remote=%service_remote% -jar %service_consumer_jar%
+   java -Dserver.port=9000  -Drpc.transport.type=http -Drpc.registry.type=direct -Drpc.registry.direct.remote=%service_remote% -jar %service_consumer_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
    ``` bash
@@ -105,11 +101,41 @@ mvn clean package
    ```
    刷新页面，观察消费者和提供者的日志，远程服务的调用根据直连配置，轮询访问三个远程服务提供者。
 
-2. 演示LocalRegistry （远程服务本地调用）
+2. 演示2：基于Netty的TCP数据通信 + DirectRegistry
+   - 启动服务提供者，启动命令如下，
+   ``` bash
+   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9090 -jar %service_provider_jar%
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9091 -jar %service_provider_jar%
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9092 -jar %service_provider_jar%
+   ```
+   - 服务消费者，启动命令如下，配置注册中心类型为direct，并指定了直连的远程服务地址。
+   ``` bash
+   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   set service_remote=netty://localhost:9090,netty://localhost:9091,netty://localhost:9092
+   java -Dserver.port=9000  -Drpc.transport.type=netty -Drpc.registry.type=direct -Drpc.registry.direct.remote=%service_remote% -jar %service_consumer_jar%
+   ```
+   - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
+   ``` bash
+   http://localhost:9000/hello
+   ```
+   刷新页面，观察消费者和提供者的日志，远程服务的调用根据直连配置，轮询访问三个远程服务提供者。
+
+## 更多演示
+
+1. 和不同注册中心相互组合，有如下几种演示
+
+|   | 基于Jetty的HTTP数据通信 | 基于Netty的TCP数据通信 |
+| :------------: | :------------: | :------------: |
+| 直连调用（DirectRegistry） | 演示1 | 演示2  |
+| 本地调用（LocalRegistry）  | 演示3 | 演示4  |
+| 文件注册中心（FileRegistry）  | 演示5  | 演示6  |
+
+2. 演示3：基于Jetty的HTTP数据通信 + LocalRegistry
    - 启动服务消费者，启动命令如下，
    ``` bash
    set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v10-1.10-SNAPSHOT.jar
-   java -Dserver.port=9002 -Drpc.registry.type=local -jar %service_consumer_local_jar%
+   java -Dserver.port=9002 -Drpc.transport.type=http -Drpc.registry.type=local -jar %service_consumer_local_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
    ``` bash
@@ -123,20 +149,53 @@ mvn clean package
    [20180508 21:03:11-484][http-nio-9002-exec-6] consumer receive response from remote rpc call, value=Hello, Michael. This is greetings from localhost:9002 at Tue May 08 21:03:11 CST 2018.
    ```
 
-4. 演示FileRegistry （文件注册中心）
+3. 演示4：基于Netty的TCP数据通信 + LocalRegistry
+   - 启动服务消费者，启动命令如下，
+   ``` bash
+   set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v10-1.10-SNAPSHOT.jar
+   java -Dserver.port=9002 -Drpc.transport.type=netty -Drpc.registry.type=local -jar %service_consumer_local_jar%
+   ```
+   - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
+   ``` bash
+   http://localhost:9002/hello
+   ```
+
+4. 演示5：基于Jetty的HTTP数据通信 + FileRegistry
    - 清空文件c://temp/registry.txt，或者删除。
    - 启动服务提供者，启动命令如下，配置注册中心类型为file，在文件registry.txt中实现服务的注册和发现
    ``` bash
    set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
-   java -Drpc.transport.provider.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
-   java -Drpc.transport.provider.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
-   java -Drpc.transport.provider.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.type=http -Drpc.transport.provider.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
    ```
    启动后，可以打开文件c://temp/registry.txt，查看所有服务的注册信息。
    - 服务消费者，启动命令如下，配置注册中心类型为file，在文件registry.txt中发现服务提供者
    ``` bash
    set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
-   java -Dserver.port=9001 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_consumer_jar%
+   java -Dserver.port=9001 -Drpc.transport.type=http -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_consumer_jar%
+   ```
+   - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
+   ``` bash
+   http://localhost:9001/hello
+   ```
+   刷新页面，观察消费者和提供者的日志，远程服务的调用根据文件注册中心，轮询访问三个远程服务提供者。
+   - 可以尝试先后关闭9090/9091端口的服务提供者，再次刷新页面，可以发现消费者会根据服务在注册中心的状态，选择可用的服务提供者进行调用。
+
+4. 演示6：基于Netty的TCP数据通信 + FileRegistry
+   - 清空文件c://temp/registry.txt，或者删除。
+   - 启动服务提供者，启动命令如下，配置注册中心类型为file，在文件registry.txt中实现服务的注册和发现
+   ``` bash
+   set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9090 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9091 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   java -Drpc.transport.type=netty -Drpc.transport.provider.port=9092 -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_provider_jar%
+   ```
+   启动后，可以打开文件c://temp/registry.txt，查看所有服务的注册信息。
+   - 服务消费者，启动命令如下，配置注册中心类型为file，在文件registry.txt中发现服务提供者
+   ``` bash
+   set service_consumer_jar=./service-consumer/target/service-consumer-v10-1.10-SNAPSHOT.jar
+   java -Dserver.port=9001 -Drpc.transport.type=netty -Drpc.registry.type=file -Drpc.registry.host="c://temp/registry.txt" -jar %service_consumer_jar%
    ```
    - 打开浏览器，访问如下地址，刷新页面可以看到远程调用请求成功后的消息。
    ``` bash

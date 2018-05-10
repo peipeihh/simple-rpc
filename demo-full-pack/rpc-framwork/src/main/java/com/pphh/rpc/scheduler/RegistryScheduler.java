@@ -16,13 +16,10 @@ package com.pphh.rpc.scheduler;
 
 import com.pphh.rpc.provider.Provider;
 import com.pphh.rpc.provider.RpcProviderResource;
-import com.pphh.rpc.registry.LocalRegistry;
 import com.pphh.rpc.registry.Registry;
 import com.pphh.rpc.rpc.URL;
 import com.pphh.rpc.transport.Server;
-import com.pphh.rpc.transport.http.ServletEndpoint;
 import com.pphh.rpc.util.LogUtil;
-import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
@@ -32,7 +29,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 import java.util.Map;
 import java.util.Set;
 

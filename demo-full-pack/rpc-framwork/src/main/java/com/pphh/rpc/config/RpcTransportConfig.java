@@ -14,14 +14,12 @@
  */
 package com.pphh.rpc.config;
 
-import com.pphh.rpc.rpc.URL;
 import com.pphh.rpc.transport.Client;
 import com.pphh.rpc.transport.Server;
 import com.pphh.rpc.transport.http.HttpClient;
 import com.pphh.rpc.transport.http.HttpServer;
 import com.pphh.rpc.transport.netty.NettyClient;
 import com.pphh.rpc.transport.netty.NettyServer;
-import com.pphh.rpc.util.NetUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

@@ -72,17 +72,22 @@ public class URL {
                 }
 
                 url = url.substring(0, i);
-                i = url.indexOf(":");
-                if (i >= 0) {
-                    port = Integer.parseInt(url.substring(i + 1));
-                    host = url.substring(0, i);
-                }
+            }
+
+
+            i = url.indexOf(":");
+            if (i >= 0) {
+                port = Integer.parseInt(url.substring(i + 1));
+                host = url.substring(0, i);
+            } else {
+                port = 80;
+                host = url;
             }
         }
 
         // initialize the URL when the input url has an correct string format
         URL rt = null;
-        if (protocol != null && host != null && port > 0 && path != null) {
+        if (protocol != null && host != null && port > 0) {
             rt = new URL(protocol, host, port, path, query);
         }
 
@@ -90,7 +95,15 @@ public class URL {
     }
 
     public String toString() {
-        String fullUrl = String.format("%s://%s:%s/%s", protocol, host, port, path);
+        String fullUrl;
+        if (this.path == null && port == 80) {
+            fullUrl = String.format("%s://%s", protocol, host);
+        } else if (this.path == null) {
+            fullUrl = String.format("%s://%s:%s", protocol, host, port);
+        } else {
+            fullUrl = String.format("%s://%s:%s/%s", protocol, host, port, path);
+        }
+
         if (this.queries != null) {
             String fullQuery = "";
             for (Map.Entry<String, String> entry : this.queries.entrySet()) {
@@ -178,8 +191,8 @@ public class URL {
         int result = protocol.hashCode();
         result = 31 * result + host.hashCode();
         result = 31 * result + port;
-        result = 31 * result + path.hashCode();
-        //if (queries != null) result = 31 * result + queries.hashCode();
+        if (path != null) result = 31 * result + path.hashCode();
+        if (queries != null) result = 31 * result + queries.hashCode();
         return result;
     }
 }

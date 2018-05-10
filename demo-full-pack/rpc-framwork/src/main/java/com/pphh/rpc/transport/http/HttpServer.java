@@ -26,8 +26,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import java.net.InetAddress;
 
 /**
+ * a http server implemented by jetty
  * Created by huangyinhuang on 3/13/2018.
- * a http server by jetty
  */
 public class HttpServer implements Server {
 

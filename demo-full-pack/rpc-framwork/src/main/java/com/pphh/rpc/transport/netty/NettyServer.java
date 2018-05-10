@@ -29,7 +29,7 @@ import io.netty.handler.logging.LoggingHandler;
 import java.net.InetAddress;
 
 /**
- * Please add description here.
+ * a transport server implemented by netty
  *
  * @author huangyinhuang
  * @date 5/8/2018

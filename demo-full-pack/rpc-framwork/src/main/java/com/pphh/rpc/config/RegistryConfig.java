@@ -37,7 +37,7 @@ public class RegistryConfig {
     @Value("${rpc.registry.host:}")
     private String registryHost;
 
-    @Value("${rpc.registry.direct.remote:http://localhost:9090/rpc}")
+    @Value("${rpc.registry.direct.remote:http://localhost:9090}")
     private String directRemoteHosts;
 
     @Bean

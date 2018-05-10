@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * a http client implemented by Unirest
  * Created by huangyinhuang on 3/13/2018.
- * a http client by Unirest
  */
 public class HttpClient implements Client, Caller {
 
