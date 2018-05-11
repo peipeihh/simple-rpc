@@ -11,6 +11,7 @@
 项目中有如下相关的配置，
 
 - 服务提供方
+
 ```
 # 通信协议（http/tcp）
 rpc.transport.type = http, netty  
@@ -27,6 +28,7 @@ rpc.service.heartbeat.report.fixedRate=5000
 ```
 
 - 服务消费方
+
 ```
 # 负载均衡和高可用策略
 rpc.client.ha = failover, failfast
