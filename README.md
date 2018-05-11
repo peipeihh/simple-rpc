@@ -62,7 +62,7 @@ There are a series of demo projects, which will introduce the core techs one by 
 调用监控（metrics）
 
 ## 演示（全栈技术）（demo-full-pack）
-full pack tech demo
+全栈技术演示
 
 ## 联系 Contact
 我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。
