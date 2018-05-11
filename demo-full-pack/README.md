@@ -88,6 +88,7 @@ mvn clean package
 环境：Windows 7 SP1 + Java 9.0.1 + Maven 3.3.9
 
 根据不同的注册中心和负载均衡和高可用策略，有如下几种组合演示
+
 |  负载均衡+高可用策略 | failfast + random | failover + roundrobin |
 | :------------: | :------------: | :------------: |
 | 直连调用（DirectRegistry） | 演示1 | 演示2  |
