@@ -54,7 +54,7 @@ public class Serializer {
             in.close();
             byteInStream.close();
         } catch (IOException | ClassNotFoundException e) {
-            LogUtil.print("failed to parse the request from POST payload.");
+            LogUtil.print("failed to parse the request from data payload.");
         }
 
         return request;

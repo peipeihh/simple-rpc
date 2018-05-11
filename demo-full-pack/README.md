@@ -70,6 +70,16 @@ mvn clean package
 若无特别声明，演示的shell命令都将在演示项目的根目录中执行。
 环境：Windows 7 SP1 + Java 9.0.1 + Maven 3.3.9
 
+和不同注册中心相互组合，有如下几种演示
+
+|   | 基于Jetty的HTTP数据通信 | 基于Netty的TCP数据通信 |
+| :------------: | :------------: | :------------: |
+| 直连调用（DirectRegistry） | 演示1 | 演示2  |
+| 本地调用（LocalRegistry）  | 演示3 | 演示4  |
+| 文件注册中心（FileRegistry）  | 演示5  | 演示6  |
+
+各个演示的详细步骤见如下。
+
 ## 演示
 
 1. 下面的演示中将分别启动服务消费者和提供者在如下端口，
@@ -101,7 +111,7 @@ mvn clean package
    ```
    刷新页面，观察消费者和提供者的日志，远程服务的调用根据直连配置，轮询访问三个远程服务提供者。
 
-2. 演示2：基于Netty的TCP数据通信 + DirectRegistry
+3. 演示2：基于Netty的TCP数据通信 + DirectRegistry
    - 启动服务提供者，启动命令如下，
    ``` bash
    set service_provider_jar=./service-provider/target/service-provider-v10-1.10-SNAPSHOT.jar
@@ -123,15 +133,7 @@ mvn clean package
 
 ## 更多演示
 
-1. 和不同注册中心相互组合，有如下几种演示
-
-|   | 基于Jetty的HTTP数据通信 | 基于Netty的TCP数据通信 |
-| :------------: | :------------: | :------------: |
-| 直连调用（DirectRegistry） | 演示1 | 演示2  |
-| 本地调用（LocalRegistry）  | 演示3 | 演示4  |
-| 文件注册中心（FileRegistry）  | 演示5  | 演示6  |
-
-2. 演示3：基于Jetty的HTTP数据通信 + LocalRegistry
+1. 演示3：基于Jetty的HTTP数据通信 + LocalRegistry
    - 启动服务消费者，启动命令如下，
    ``` bash
    set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v10-1.10-SNAPSHOT.jar
@@ -149,7 +151,7 @@ mvn clean package
    [20180508 21:03:11-484][http-nio-9002-exec-6] consumer receive response from remote rpc call, value=Hello, Michael. This is greetings from localhost:9002 at Tue May 08 21:03:11 CST 2018.
    ```
 
-3. 演示4：基于Netty的TCP数据通信 + LocalRegistry
+2. 演示4：基于Netty的TCP数据通信 + LocalRegistry
    - 启动服务消费者，启动命令如下，
    ``` bash
    set service_consumer_local_jar=./service-consumer-local/target/service-consumer-local-v10-1.10-SNAPSHOT.jar
@@ -160,7 +162,7 @@ mvn clean package
    http://localhost:9002/hello
    ```
 
-4. 演示5：基于Jetty的HTTP数据通信 + FileRegistry
+3. 演示5：基于Jetty的HTTP数据通信 + FileRegistry
    - 清空文件c://temp/registry.txt，或者删除。
    - 启动服务提供者，启动命令如下，配置注册中心类型为file，在文件registry.txt中实现服务的注册和发现
    ``` bash
@@ -202,7 +204,6 @@ mvn clean package
    http://localhost:9001/hello
    ```
    刷新页面，观察消费者和提供者的日志，远程服务的调用根据文件注册中心，轮询访问三个远程服务提供者。
-   - 可以尝试先后关闭9090/9091端口的服务提供者，再次刷新页面，可以发现消费者会根据服务在注册中心的状态，选择可用的服务提供者进行调用。
 
 ## 联系 Contact
 我们的邮箱地址：peipeihh@qq.com，欢迎来信联系。
