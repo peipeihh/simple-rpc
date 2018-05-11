@@ -1,0 +1,101 @@
+/*
+ * Copyright 2018 peipeihh
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * limitations under the License.
+ */
+package com.pphh.rpc.provider;
+
+import com.pphh.rpc.rpc.Caller;
+import com.pphh.rpc.rpc.DefaultResponse;
+import com.pphh.rpc.rpc.Request;
+import com.pphh.rpc.rpc.Response;
+import com.pphh.rpc.util.MethodSignUtil;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by huangyinhuang on 1/11/2018.
+ * Service Provider, which will be initialized on remote service provider side
+ * 服务端代理调用
+ */
+public class Provider<T> implements Caller {
+
+    private T serviceInstance;
+    private Class<T> interfaceClz;
+    private Map<String, Method> methodMap;
+
+    public Provider(T serviceInstance, Class<T> interfaceClz) {
+        this.serviceInstance = serviceInstance;
+        this.interfaceClz = interfaceClz;
+        initMethodMap(interfaceClz);
+    }
+
+    public Response invoke(Request request) {
+        DefaultResponse response = new DefaultResponse();
+        Method method = lookupMethod(request.getMethodName(), request.getMethodSignature());
+
+        try {
+            Object value = method.invoke(this.serviceInstance, request.getArguments());
+            response.setValue(value);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            response.setException(e);
+        }
+
+        response.setRequestId(request.getRequestId());
+        return response;
+    }
+
+    public Method lookupMethod(String methodName, String methodSign) {
+        Method method = null;
+        if (this.methodMap.containsKey(methodName)) {
+            method = this.methodMap.get(methodName);
+        } else {
+            method = this.methodMap.get(methodSign);
+        }
+        return method;
+    }
+
+    public Map<String, Method> getMethodMap(){
+        return this.methodMap;
+    }
+
+    private void initMethodMap(Class<T> interfaceClz) {
+        this.methodMap = new HashMap<>();
+        Method[] methods = interfaceClz.getMethods();
+        Map<String, List<Method>> nameMethodMap = new HashMap<>();
+        for (Method method : methods) {
+            List<Method> nameMethods = nameMethodMap.get(method.getName());
+            if (nameMethods == null){
+                nameMethods = new ArrayList<>();
+                nameMethodMap.put(method.getName(), nameMethods);
+            }
+            nameMethods.add(method);
+        }
+        for (String methodName : nameMethodMap.keySet()) {
+            List<Method> nameMethods = nameMethodMap.get(methodName);
+            if (nameMethods.size() == 1) {
+                Method method = nameMethods.get(0);
+                this.methodMap.put(MethodSignUtil.getMethodSignature(interfaceClz.getName(), methodName,null), method);
+            }
+            for (Method method : nameMethods) {
+                this.methodMap.put(MethodSignUtil.getMethodSignature(method), method);
+            }
+        }
+    }
+
+}
