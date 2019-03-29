@@ -25,10 +25,29 @@ There are a series of demo projects, which will introduce the core techs one by 
 ## 环境准备
 准备好JDK7和Maven3即可。
 
-## 一分钟快速入门 Getting Started
-请进入演示目录，按照说明文档进行项目构建和运行，按照演示步骤执行一次简单的远程调用。
 
-演示2项目提供了最简单的框架演示。
+## 项目结构简介
+
+整个项目分6个子项目，
+
+- demo-1  业界已有RPC框架的演示使用
+- demo-2  演示一个简要RPC框架的搭建
+- demo-3  演示一个简要RPC框架里的负载均衡和高可用
+- demo-4  演示一个简要RPC框架里的注册中心
+- demo-5  演示一个简要RPC框架里的通信协议
+- demo-6  演示一个简要RPC框架里的数据序列化（TBD）
+- demo-7  演示一个简要RPC框架里的调用监控埋点（TBD）
+- demo-full-pack 全栈技术演示
+
+从demo2到demo-full-pack，每一个项目是在前一个项目的代码基础上丰富新的RPC功能，最后的demo-full-pack拥有所有的RPC功能演示。
+
+各个demo项目都独立的子项目，各自独立打开进行编译构建，请从demo-2开始入手查看RPC框架，然后依次打开demo-3到demo-5项目，查看演示的功能，具体演示步骤请参考各个子项目的README文件。
+
+整个项目的构建以demo-full-pack子项目作为最终的全栈技术演示。
+
+## 一分钟快速入门 Getting Started
+
+演示2项目提供了最简单的框架演示，请进入演示目录，按照说明文档进行项目构建和运行，按照演示步骤执行一次简单的远程调用。
 
 ## 演示1（demo-1）
 远程调用框架演示，对dubbo,grpc,motan这三个RPC框架的演示使用。
